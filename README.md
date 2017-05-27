@@ -200,6 +200,118 @@ t" datetime NOT NULL);
 
 ## <a name="parte4">Nested routes e resource</a>
 
+-> rails generate scaffold album title:string
+
+-> rails generate scaffold song name:string
+
+Gerando apenas resources: (não cria views)
+
+-> rails generate resource address # apenas exemplo
+
+Relacionando:
+
+```ruby
+Rails.application.routes.draw do
+  resources :songs
+  resources :albums
+end
+
+```
+```ruby
+class Song < ApplicationRecord
+  belongs_to :album
+end
+```
+```ruby
+class Album < ApplicationRecord
+  has_many :songs
+end
+
+```
+```ruby
+class CreateSongs < ActiveRecord::Migration[5.1]
+  def change
+    create_table :songs do |t|
+      t.string :name
+
+      t.timestamps
+      t.belongs_to :album, index: true 
+    end
+  end
+end
+
+```
+
+-> rails db:migrate
+
+-> rails s (testar)
+
+Listar todas as rotas
+
+-> rails routes
+```
+rails routes
+    Prefix Verb   URI Pattern                Controller#Action
+     songs GET    /songs(.:format)           songs#index
+           POST   /songs(.:format)           songs#create
+  new_song GET    /songs/new(.:format)       songs#new
+ edit_song GET    /songs/:id/edit(.:format)  songs#edit
+      song GET    /songs/:id(.:format)       songs#show
+           PATCH  /songs/:id(.:format)       songs#update
+           PUT    /songs/:id(.:format)       songs#update
+           DELETE /songs/:id(.:format)       songs#destroy
+    albums GET    /albums(.:format)          albums#index
+           POST   /albums(.:format)          albums#create
+ new_album GET    /albums/new(.:format)      albums#new
+edit_album GET    /albums/:id/edit(.:format) albums#edit
+     album GET    /albums/:id(.:format)      albums#show
+           PATCH  /albums/:id(.:format)      albums#update
+           PUT    /albums/:id(.:format)      albums#update
+           DELETE /albums/:id(.:format)      albums#destroy
+
+```
+
+Rotas alinhadas
+```ruby
+Rails.application.routes.draw do
+  resources :albums do
+    resources :songs
+  end
+end
+
+```
+```
+rails routes
+         Prefix Verb   URI Pattern                                Controller#Action
+    album_songs GET    /albums/:album_id/songs(.:format)          songs#index
+                POST   /albums/:album_id/songs(.:format)          songs#create
+ new_album_song GET    /albums/:album_id/songs/new(.:format)      songs#new
+edit_album_song GET    /albums/:album_id/songs/:id/edit(.:format) songs#edit
+     album_song GET    /albums/:album_id/songs/:id(.:format)      songs#show
+                PATCH  /albums/:album_id/songs/:id(.:format)      songs#update
+                PUT    /albums/:album_id/songs/:id(.:format)      songs#update
+                DELETE /albums/:album_id/songs/:id(.:format)      songs#destroy
+         albums GET    /albums(.:format)                          albums#index
+                POST   /albums(.:format)                          albums#create
+      new_album GET    /albums/new(.:format)                      albums#new
+     edit_album GET    /albums/:id/edit(.:format)                 albums#edit
+          album GET    /albums/:id(.:format)                      albums#show
+                PATCH  /albums/:id(.:format)                      albums#update
+                PUT    /albums/:id(.:format)                      albums#update
+                DELETE /albums/:id(.:format)                      albums#destroy
+
+
+```
+
+Ajustes nos Controllers
+
+
+
+
+[8.6 - Para Saber Mais - Nested Resources](https://www.caelum.com.br/apostila-ruby-on-rails/rotas/#8-6-para-saber-mais-nested-resources)
+
+[http://guides.rubyonrails.org/routing.html](http://guides.rubyonrails.org/routing.html)
+
 [Voltar ao Índice](#indice)
 
 ---
