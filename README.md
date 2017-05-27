@@ -40,6 +40,88 @@ Referências:
 
 ## <a name="parte2">Relações entre model - one to many</a>
 
+-> rails generate model book title:string page:integer
+```ruby
+class Book < ApplicationRecord
+  belongs_to :author
+end
+
+```
+
+-> rails generate model author name:string
+```ruby
+class Author < ApplicationRecord
+  has_many :books
+end
+
+```
+
+Ajustando migration
+
+```ruby
+class CreateBooks < ActiveRecord::Migration[5.1]
+  def change
+    create_table :books do |t|
+      t.string :title
+      t.integer :page
+
+      t.timestamps
+
+      t.belongs_to :author, index: true
+    end
+  end
+end
+
+```
+
+-> rails db:migrate
+```
+== 20170527114158 CreateBooks: migrating ======================================
+-- create_table(:books)
+   -> 0.0029s
+== 20170527114158 CreateBooks: migrated (0.0037s) =============================
+
+== 20170527114439 CreateAuthors: migrating ====================================
+-- create_table(:authors)
+   -> 0.0022s
+== 20170527114439 CreateAuthors: migrated (0.0029s) ===========================
+
+```
+
+-> rails console
+```
+Author.create(:name => "Jose Malcher")
+   (0.0ms)  begin transaction
+  SQL (2.0ms)  INSERT INTO "authors" ("name", "created_at", "updated_at") VALUES (?, ?, ?)  [["name", "Jose Malcher"], ["created_at", "2017-05-27
+ 11:59:44.691326"], ["updated_at", "2017-05-27 11:59:44.691326"]]
+   (963.7ms)  commit transaction
+=> #<Author id: 1, name: "Jose Malcher", created_at: "2017-05-27 11:59:44", updated_at: "2017-05-27 11:59:44">
+
+```
+
+```
+Book.create(:title => "Book 1", :page => 200, :author_id => 1)
+   (0.0ms)  begin transaction
+  Author Load (0.0ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = ? LIMIT ?  [["id", 1], ["LIMIT", 1]]
+  SQL (1.7ms)  INSERT INTO "books" ("title", "page", "created_at", "updated_at", "author_id") VALUES (?, ?, ?, ?, ?)  [["title", "Book 1"], ["pag
+e", 200], ["created_at", "2017-05-27 12:03:10.102135"], ["updated_at", "2017-05-27 12:03:10.102135"], ["author_id", 1]]
+   (40.6ms)  commit transaction
+=> #<Book id: 1, title: "Book 1", page: 200, created_at: "2017-05-27 12:03:10", updated_at: "2017-05-27 12:03:10", author_id: 1>
+
+```
+
+```
+Book.all()
+  Book Load (0.0ms)  SELECT  "books".* FROM "books" LIMIT ?  [["LIMIT", 11]]
+=> #<ActiveRecord::Relation [#<Book id: 1, title: "Book 1", page: 200, created_at: "2017-05-27 12:03:10", updated_at: "2017-05-27 12:03:10", auth
+or_id: 1>]>
+
+```
+
+
+[7.6 - Criando Modelos](https://www.caelum.com.br/apostila-ruby-on-rails/active-record/#7-6-criando-modelos)
+
+
 [Voltar ao Índice](#indice)
 
 ---
