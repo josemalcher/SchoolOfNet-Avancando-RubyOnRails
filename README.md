@@ -128,6 +128,72 @@ or_id: 1>]>
 
 ## <a name="parte3">Relações entre model - one to one</a>
 
+-> rails generate model Person name:string
+```ruby
+class Person < ApplicationRecord
+  has_many :passaports
+end
+
+```
+
+-> rails generate model Passaport country:string 
+
+```ruby
+class CreatePeople < ActiveRecord::Migration[5.1]
+  def change
+    create_table :people do |t|
+      t.string :name
+
+      t.timestamps
+
+      t.belongs_to :passaports, index: true
+    end
+  end
+end
+
+```
+-> rails db:migrate
+```
+== 20170527123005 CreatePeople: migrating =====================================
+-- create_table(:people)
+   -> 0.0027s
+== 20170527123005 CreatePeople: migrated (0.0031s) ============================
+
+== 20170527123022 CreatePassaports: migrating =================================
+-- create_table(:passaports)
+   -> 0.0024s
+== 20170527123022 CreatePassaports: migrated (0.0027s) ========================
+
+```
+
+Verificação
+
+[http://www.sqlite.org/download.html](http://www.sqlite.org/download.html)
+
+-> rails dbconsole
+```sql
+sqlite> .schema people
+CREATE TABLE IF NOT EXISTS "people" ("id" INTEGER PRIMARY KEY AUTOIN
+CREMENT NOT NULL, "name" varchar, "created_at" datetime NOT NULL, "u
+pdated_at" datetime NOT NULL, "passaports_id" integer);
+CREATE INDEX "index_people_on_passaports_id" ON "people" ("passaport
+s_id");
+
+sqlite> .schema books
+CREATE TABLE IF NOT EXISTS "books" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar, "page" integer, "created_at" datetime NOT N
+ULL, "updated_at" datetime NOT NULL, "author_id" integer);
+CREATE INDEX "index_books_on_author_id" ON "books" ("author_id");
+
+sqlite> .schema authors
+CREATE TABLE IF NOT EXISTS "authors" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime NOT NULL, "updated_a
+t" datetime NOT NULL);
+
+
+```
+
+
+
+
 [Voltar ao Índice](#indice)
 
 ---
