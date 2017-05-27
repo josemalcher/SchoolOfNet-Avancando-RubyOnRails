@@ -26,6 +26,14 @@ https://www.schoolofnet.com/curso-avancando-com-ruby-rails
 
 ## <a name="parte1">Introdução</a>
 
+Referências:
+
+[Desenv. Ágil para Web com Ruby on Rails](https://www.caelum.com.br/apostila-ruby-on-rails/)
+
+[Ruby on Rails Guides](http://guides.rubyonrails.org/)
+
+[Livro - Ruby on Rails coloque sua aplicação web nos trilhos](https://www.casadocodigo.com.br/products/livro-ruby-on-rails)
+
 [Voltar ao Índice](#indice)
 
 ---
