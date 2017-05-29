@@ -358,7 +358,7 @@ Rotas
 Rails.application.routes.draw do
 
   get '/albums/search' => 'albums#search'
-  get '/album/searchAlbum' => 'albums#searchAlbum'
+  post '/album/searchAlbum' => 'albums#searchAlbum'
 
   resources :albums do
     resources :songs
