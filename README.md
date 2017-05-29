@@ -318,6 +318,59 @@ Ajustes nos Controllers
 
 ## <a name="parte5">Trabalhado com form helper</a>
 
+Criado "search.html.erb"
+```ruby
+<%= form_tag(action: 'searchAlbum', method: 'get', controller: 'albums') do %>
+
+  <%= label_tag(:name, "Search for album name:") %>
+  <%= text_field_tag(:name) %>
+  <%= submit_tag("Do serach") %>
+  
+  <%= check_box_tag(:colors) %>
+  <%= label_tag(:colors, "Color") %>
+  
+  <%= radio_button_tag(:gender, "gender") %>
+  <%= label_tag(:gender, "Gender") %>
+
+<% end %>
+```
+
+Para Renderizar -> albums_controller.rb
+```ruby
+# (...)
+  # GET /search
+  def search
+    render "search"
+  end
+
+  def searchAlbum
+    @album = Album.find_by(title: params[:name])
+    respond_to do |format|
+      format.html { redirect_to @album }
+      format.json { render :json => @album }
+    end
+  end
+# (...)
+```
+
+Rotas
+```ruby
+Rails.application.routes.draw do
+
+  get '/albums/search' => 'albums#search'
+  get '/album/searchAlbum' => 'albums#searchAlbum'
+
+  resources :albums do
+    resources :songs
+  end
+end
+```
+
+
+
+
+[9.14 - Helpers para formulários](https://www.caelum.com.br/apostila-ruby-on-rails/controllers-e-views/#9-14-helpers-para-formularios)
+
 [Voltar ao Índice](#indice)
 
 ---

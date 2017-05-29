@@ -21,6 +21,19 @@ class AlbumsController < ApplicationController
   def edit
   end
 
+  # GET /search
+  def search
+    render "search"
+  end
+
+  def searchAlbum
+    @album = Album.find_by(title: params[:name])
+    respond_to do |format|
+      format.html { redirect_to @album }
+      format.json { render :json => @album }
+    end
+  end
+
   # POST /albums
   # POST /albums.json
   def create
